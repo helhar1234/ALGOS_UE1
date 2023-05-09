@@ -38,6 +38,7 @@ while True:
     if not command.strip():
         print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
         continue
+        continue
 
     split_input = command.split()
 
