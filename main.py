@@ -8,7 +8,8 @@ def check_file_exists(filename):
     if not os.path.isfile(filename):
         print(bcolors.WARNING + "\nFile not found!" + bcolors.RESET)
         return False
-
+    else:
+        return True
 
 def check_station_exists(station):
     return True
