@@ -2,7 +2,8 @@ import os
 import re
 
 from StartConsole import *
-from graph import*
+from graph import *
+
 
 def check_file_exists(filename):
     if not os.path.isfile(filename):
@@ -10,6 +11,7 @@ def check_file_exists(filename):
         return False
     else:
         return True
+
 
 def check_station_exists(station):
     return True
@@ -38,7 +40,6 @@ while True:
     command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
     if not command.strip():
         print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
-        continue
         continue
 
     split_input = command.split()
