@@ -1,66 +1,65 @@
-import os    # um zu überprüfen, ob eine Datei existiert
-import re    # um die Zeilen aus der Datei zu parsen
+import os
+import re
 
-from StartConsole import *  # um die Beschreibung des Programms auszugeben
-from graph import *     # um die Klasse Graph zu importieren
+from StartConsole import *
+from graph import*
 
+def check_file_exists(filename):
+    if not os.path.isfile(filename):
+        print(bcolors.WARNING + "\nFile not found!" + bcolors.RESET)
+        return False
+    else:
+        return True
 
-def check_file_exists(filename):    # Funktion um zu überprüfen, ob eine Datei existiert
-    if not os.path.isfile(filename):    # Wenn die Datei nicht existiert
-        print(bcolors.WARNING + "\nFile not found!" + bcolors.RESET)     # Gib eine Warnung aus
-        return False    # Gib zurück, dass die Datei nicht existiert
-    else:   # Wenn die Datei existiert
-        return True  # Gib zurück, dass die Datei existiert
-
-
-def check_station_exists(station):  # Funktion um zu überprüfen, ob eine Station existiert
-    return True     # Gib zurück, dass die Station existiert
+def check_station_exists(station):
+    return True
 
 
-def create_network_from_file(filename):     # Funktion um ein Netzwerk aus einer Datei zu erstellen
-    graph = Graph()     # Erstelle ein Graph Objekt
-    with open(filename, 'r') as file:   # Öffne die Datei
-        for line in file:   # Für jede Zeile in der Datei
-            parts = line.strip().split(': ')    # Teile die Zeile an dem ':' auf
-            if len(parts) > 1:  # wenn die Zeile mehr als einen Teil hat
-                line_name = parts[0]    # der erste Teil ist der Name der Linie
-                line = parts[1]  # der zweite Teil ist die Linie
-                line_parts = re.findall(r'\".*?\" \d', line)    # finde alle Stationen in der Linie
-                for i in range(len(line_parts) - 1):    # für jede Station in der Linie
-                    station1 = line_parts[i].split('"')[1]  # speichere die erste Station in einer Variable
-                    station2 = line_parts[i + 1].split('"')[1]  # speichere die zweite Station in einer Variable
-                    weight = int(line_parts[i].split(' ')[-1])  # speichere das Gewicht in einer Variable
-                    graph.add_route(station1, station2, weight, line_name)  # füge die Verbindung hinzu
-    return graph    # gib den Graphen zurück
+def create_network_from_file(filename):
+    graph = Graph()
+    with open(filename, 'r') as file:
+        for line in file:
+            parts = line.strip().split(': ')
+            if len(parts) > 1:  # make sure there is something after the ':'
+                line_name = parts[0]  # save the line name
+                line = parts[1]
+                line_parts = re.findall(r'\".*?\" \d', line)  # split the remaining string into station-time pairs
+                for i in range(len(line_parts) - 1):
+                    station1 = line_parts[i].split('"')[1]
+                    station2 = line_parts[i + 1].split('"')[1]
+                    weight = int(line_parts[i].split(' ')[-1])
+                    graph.add_route(station1, station2, weight, line_name)  # add the line name when adding the route
+    return graph
 
 
-programm_description()  # Gib die Beschreibung des Programms aus
+programm_description()
 
-while True:     # Wiederhole so lange bis der Benutzer das Programm beendet
-    command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)   # Gib eine Eingabeaufforderung aus
-    if not command.strip():  # Wenn die Eingabe leer ist
-        print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)   # Gib eine Warnung aus
-        continue     # Springe zum nächsten Durchlauf
+while True:
+    command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
+    if not command.strip():
+        print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
+        continue
+        continue
 
-    split_input = command.split()   # Teile die Eingabe an den Leerzeichen auf
+    split_input = command.split()
 
-    if split_input[0] == "exit":    # Wenn der Benutzer das Programm beenden will
-        print(bcolors.CYAN + bcolors.BOLD + "Goodbye!" + bcolors.RESET)     # Gib eine Verabschiedung aus
-        break   # Beende das Programm
+    if split_input[0] == "exit":
+        print(bcolors.CYAN + bcolors.BOLD + "Goodbye!" + bcolors.RESET)
+        break
 
-    if len(split_input) < 3:     # Wenn die Eingabe weniger als 3 Teile hat
-        print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)   # Gib eine Warnung aus
-        continue    # Springe zum nächsten Durchlauf
+    if len(split_input) < 3:
+        print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
+        continue
 
-    if not split_input[0].endswith(".txt"):     # Wenn die Eingabe keine Dateiendung hat
-        split_input[0] += ".txt"    # Füge die Dateiendung hinzu
+    if not split_input[0].endswith(".txt"):
+        split_input[0] += ".txt"
 
-    if check_file_exists(split_input[0]):   # Wenn die Datei existiert
-        network = create_network_from_file(split_input[0])  # Erstelle ein Netzwerk aus der Datei
-        if network.station_exists(split_input[1]) and network.station_exists(split_input[2]):  # Wenn beide Stationen existieren
-            network.show_network()   # Gib das Netzwerk aus
+    if check_file_exists(split_input[0]):
+        network = create_network_from_file(split_input[0])
+        if network.station_exists(split_input[1]) and network.station_exists(split_input[2]):
+            network.show_network()
             break
-        else:   # Wenn eine der Stationen nicht existiert
-            print(bcolors.WARNING + "\nInvalid Station!" + bcolors.RESET)   # Gib eine Warnung aus
+        else:
+            print(bcolors.WARNING + "\nInvalid Station!" + bcolors.RESET)
 
     break
