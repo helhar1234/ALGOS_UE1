@@ -9,7 +9,7 @@ from shortestRoute import*
 
 def check_file_exists(filename):
     if not os.path.isfile(filename):
-        print(bcolors.WARNING + "\nFile not found!" + bcolors.RESET)
+        print(bcolors.WARNING + "\nVerkehrsnetz nicht gefunden!" + bcolors.RESET)
         return False
     else:
         return True
@@ -43,17 +43,17 @@ programm_description()
 while True:
     command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
     if not command.strip():
-        print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
+        print(bcolors.WARNING + "\nUngültiger Command!" + bcolors.RESET)
         continue
 
     split_input = shlex.split(command)
 
     if split_input[0] == "exit":
-        print(bcolors.CYAN + bcolors.BOLD + "Goodbye!" + bcolors.RESET)
+        print(bcolors.CYAN + bcolors.BOLD + "Auf Wiedersehen!" + bcolors.RESET)
         break
 
     if len(split_input) < 3:
-        print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
+        print(bcolors.WARNING + "\nUngültiger Command!" + bcolors.RESET)
         continue
 
     if not split_input[0].endswith(".txt"):
@@ -68,6 +68,6 @@ while True:
             print_route(route, total_time)
         else:
             if not network.station_exists(split_input[1]):
-                print(bcolors.WARNING + f"\nInvalid Station: {split_input[1]}!" + bcolors.RESET)
+                print(bcolors.WARNING + f"\nUngültige Station: {split_input[1]}!" + bcolors.RESET)
             else:
-                print(bcolors.WARNING + f"\nInvalid Station: {split_input[2]}!" + bcolors.RESET)
+                print(bcolors.WARNING + f"\nUngültige Station: {split_input[2]}!" + bcolors.RESET)
