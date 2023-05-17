@@ -62,7 +62,7 @@ while True:
     if check_file_exists(split_input[0]):
         network = create_network_from_file(split_input[0])
         if network.station_exists(split_input[1]) and network.station_exists(split_input[2]):
-            #network.show_network()
+            # network.show_network()
 
             route, total_time = find_shortest_route_with_dijkstra(network, split_input[1], split_input[2])
             print_route(route, total_time)

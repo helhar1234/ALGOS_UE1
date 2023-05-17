@@ -46,9 +46,9 @@ def print_route(route, total_time):
                 print(line_route.rstrip())
                 print(f"Steige von Linie {current_line} um auf Linie {line} in der Station {route[i - 1][0]}")
             current_line = line
-            line_route = f"{current_line}: {route[i - 1][0]} ({time} min') {station} ({time} min') "
+            line_route = f"{current_line}: {route[i - 1][0]} ({time} min') {station} "
         else:
-            line_route += f"{station} ({time} min') "
+            line_route += f" ({time} min') {station}"
 
     print(line_route.rstrip())  # Print the route for the last line
     print(f"Zielstation {route[-1][0]} wurde erreicht!")
