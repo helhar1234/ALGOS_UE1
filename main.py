@@ -1,10 +1,11 @@
 import os
 import re
-import shlex    #für die Eingabe von Stationen mit Leerzeichen
+import shlex    # für die Eingabe von Stationen mit Leerzeichen
 
 from StartConsole import *
 from graph import*
 from shortestRoute import*
+
 
 def check_file_exists(filename):
     if not os.path.isfile(filename):
@@ -12,6 +13,7 @@ def check_file_exists(filename):
         return False
     else:
         return True
+
 
 def check_station_exists(station):
     return True
@@ -25,12 +27,13 @@ def create_network_from_file(filename):
             if len(parts) > 1:  # make sure there is something after the ':'
                 line_name = parts[0]  # save the line name
                 line = parts[1]
-                line_parts = re.findall(r'\".*?\" \d', line)  # split the remaining string into station-time pairs
-                for i in range(len(line_parts) - 1):
+                line_parts = re.findall(r'\".*?\"(?: \d)?', line)  # split the remaining string into station-time pairs
+                for i in range(len(line_parts)):
                     station1 = line_parts[i].split('"')[1]
-                    station2 = line_parts[i + 1].split('"')[1]
-                    weight = int(line_parts[i].split(' ')[-1])
-                    graph.add_route(station1, station2, weight, line_name)  # add the line name when adding the route
+                    if i < len(line_parts) - 1:
+                        station2 = line_parts[i + 1].split('"')[1]
+                        weight = int(line_parts[i].split(' ')[-1])
+                        graph.add_route(station1, station2, weight, line_name)  # add the line name when adding the route
     return graph
 
 
@@ -65,7 +68,3 @@ while True:
                 print(bcolors.WARNING + f"\nInvalid Station: {split_input[1]}!" + bcolors.RESET)
             else:
                 print(bcolors.WARNING + f"\nInvalid Station: {split_input[2]}!" + bcolors.RESET)
-
-
-
-
