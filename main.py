@@ -1,8 +1,10 @@
 import os
 import re
+import shlex    #für die Eingabe von Stationen mit Leerzeichen
 
 from StartConsole import *
 from graph import*
+from shortestRoute import*
 
 def check_file_exists(filename):
     if not os.path.isfile(filename):
@@ -34,14 +36,14 @@ def create_network_from_file(filename):
 
 programm_description()
 
+
 while True:
     command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
     if not command.strip():
         print(bcolors.WARNING + "\nInvalid command!" + bcolors.RESET)
         continue
-        continue
 
-    split_input = command.split()
+    split_input = shlex.split(command)
 
     if split_input[0] == "exit":
         print(bcolors.CYAN + bcolors.BOLD + "Goodbye!" + bcolors.RESET)
@@ -58,8 +60,12 @@ while True:
         network = create_network_from_file(split_input[0])
         if network.station_exists(split_input[1]) and network.station_exists(split_input[2]):
             network.show_network()
-            break
         else:
-            print(bcolors.WARNING + "\nInvalid Station!" + bcolors.RESET)
+            if not network.station_exists(split_input[1]):
+                print(bcolors.WARNING + f"\nInvalid Station: {split_input[1]}!" + bcolors.RESET)
+            else:
+                print(bcolors.WARNING + f"\nInvalid Station: {split_input[2]}!" + bcolors.RESET)
 
-    break
+
+
+

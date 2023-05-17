@@ -12,4 +12,5 @@ def programm_description():
 
     print(bcolors.HEADER + bcolors.BOLD + bcolors.GREEN + "\nfilename_graph🗺️:"+bcolors.WHITE+" Filename, wo das Verkehrsnetz abgespeichert ist.")
     print(bcolors.HEADER + bcolors.BOLD + bcolors.RED + "start🚩:"+bcolors.WHITE+" Startstation.")
-    print(bcolors.HEADER + bcolors.BOLD + bcolors.BLUE + "ziel🏁:"+bcolors.WHITE+" Zielstation.\n\n")
+    print(bcolors.HEADER + bcolors.BOLD + bcolors.BLUE + "ziel🏁:"+bcolors.WHITE+" Zielstation.")
+    print(bcolors.HEADER + bcolors.BOLD + bcolors.WHITE + "Wenn die Start- oder Zieltation ein Leerzeichen oder Sonderzeichen beinhaltet, bitte um Eingabe mit Anführungszeichen (z.B. \"Erlaaer Strasse\")\n\n")

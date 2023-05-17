@@ -17,7 +17,7 @@ class Graph:    # Klasse die den Graphen repräsentiert
             print(station, "->", self.network[station])  # Gib die Station und ihre Verbindungen aus (als Dictionary)
 
     def station_exists(self, station):  # Methode um zu überprüfen, ob eine Station existiert
-        return station in self.network  # Gib zurück, ob die Station im Dictionary ist (True/False)
+        return station in self.network  # Gib zurück, ob die Station im Dictionary ist (True/False). Hat einen konstanten Aufwand von O(1)
 
     def get_matrix(self):  # Methode um die Adjazenzmatrix zu bekommen
         stations = list(self.network.keys())  # Erstelle eine Liste mit allen Stationen im Dictionary
