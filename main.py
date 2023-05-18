@@ -51,6 +51,9 @@ programm_description()
 
 routes = ShortestRoutes()
 
+previous_filename = ""
+filename = ""
+
 while True:
     command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
     if not command.strip():
@@ -71,7 +74,10 @@ while True:
         split_input[0] += ".txt"
 
     if check_file_exists(split_input[0]):
-        network = create_network_from_file(split_input[0])
+        filename = split_input[0]
+        if filename != previous_filename:
+            previous_filename = filename
+            network = create_network_from_file(split_input[0])
         if network.station_exists(split_input[1]) and network.station_exists(split_input[2]):
             existing_route = routes.get_route(split_input[1], split_input[2])
             if existing_route:
