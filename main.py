@@ -20,21 +20,31 @@ def check_station_exists(station):
 
 
 def create_network_from_file(filename):
-    graph = Graph()
     with open(filename, 'r') as file:
+        stations = set()
+        routes = []
+
         for line in file:
             parts = line.strip().split(': ')
-            if len(parts) > 1:  # make sure there is something after the ':'
-                line_name = parts[0]  # save the line name
+            if len(parts) > 1:
+                line_name = parts[0]
                 line = parts[1]
-                line_parts = re.findall(r'\".*?\"(?: \d)?', line)  # split the remaining string into station-time pairs
-                for i in range(len(line_parts)):
+                line_parts = re.findall(r'\".*?\"(?: \d)?', line)
+
+                for i in range(len(line_parts) - 1):
                     station1 = line_parts[i].split('"')[1]
-                    if i < len(line_parts) - 1:
-                        station2 = line_parts[i + 1].split('"')[1]
-                        weight = int(line_parts[i].split(' ')[-1])
-                        graph.add_route(station1, station2, weight, line_name)  # add the line name when adding the route
-    return graph
+                    station2 = line_parts[i + 1].split('"')[1]
+                    weight = int(line_parts[i].split(' ')[-1])
+
+                    stations.add(station1)
+                    stations.add(station2)
+                    routes.append((station1, station2, weight, line_name))
+
+        graph = Graph(sorted(list(stations)))
+        for route in routes:
+            graph.add_route(*route)
+
+        return graph
 
 
 programm_description()
@@ -66,10 +76,8 @@ while True:
             existing_route = routes.get_route(split_input[1], split_input[2])
             if existing_route:
                 route, total_time = existing_route
-                print("Route existiert bereits!")
             else:
-                dijkstraRouter = DijkstraRouter(network)
-                route, total_time = dijkstraRouter.find_shortest_route(split_input[1], split_input[2])
+                route, total_time = network.find_shortest_route(split_input[1], split_input[2])
                 routes.add_route(split_input[1], split_input[2], (route, total_time))
             print_route(route, total_time)
         else:

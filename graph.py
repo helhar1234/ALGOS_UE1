@@ -1,29 +1,47 @@
-class Graph:    # Klasse die den Graphen repräsentiert
-    def __init__(self):  # Konstruktor
-        self.network = {}  # Dictionary das die Stationen und ihre Verbindungen speichert
+class Graph:
+    def __init__(self, stations):
+        self.stations = stations
+        self.graph = {station: {} for station in stations}
 
-    def add_station(self, station):  # Methode um Stationen hinzuzufügen (wenn sie noch nicht existieren)
-        if station not in self.network:  # Wenn die Station noch nicht im Dictionary ist
-            self.network[station] = {}  # Füge sie hinzu
+    def add_route(self, station1, station2, weight=1, line=None):
+        self.graph[station1][station2] = (weight, line)
+        self.graph[station2][station1] = (weight, line)
 
-    def add_route(self, station1, station2, weight=1, line=None):  # Methode um Verbindungen zwischen Stationen hinzuzufügen
-        self.add_station(station1)  # Füge die Stationen hinzu, falls sie noch nicht existieren
-        self.add_station(station2)  # Füge die Stationen hinzu, falls sie noch nicht existieren
-        self.network[station1][station2] = (weight, line)  # Füge die Verbindung hinzu (mit Gewicht und Linie)
-        self.network[station2][station1] = (weight, line)  # Füge die Verbindung hinzu (mit Gewicht und Linie)
+    def station_exists(self, station):
+        return station in self.stations
 
-    def show_network(self):  # Methode um das Netzwerk auszugeben
-        for station in self.network:  # Für jede Station im Dictionary
-            print(station, "->", self.network[station])  # Gib die Station und ihre Verbindungen aus (als Dictionary)
+    def find_shortest_route(self, start, end):
+        # Initialisiere die kürzesten Distanzen und vorherigen Stationen
+        shortest_distances = {station: float('inf') for station in self.stations}
+        previous_stations = {station: None for station in self.stations}
+        previous_line = {station: None for station in self.stations}
 
-    def station_exists(self, station):  # Methode um zu überprüfen, ob eine Station existiert
-        return station in self.network  # Gib zurück, ob die Station im Dictionary ist (True/False). Hat einen konstanten Aufwand von O(1)
+        shortest_distances[start] = 0  # Setze die kürzeste Distanz zur Startstation auf 0
 
-    def get_matrix(self):  # Methode um die Adjazenzmatrix zu bekommen
-        stations = list(self.network.keys())  # Erstelle eine Liste mit allen Stationen im Dictionary
-        matrix = [[0 for _ in range(len(stations))] for _ in range(len(stations))]  # Erstelle eine Matrix mit der Größe der Anzahl der Stationen
-        for i, station1 in enumerate(stations):  # Für jede Station im Dictionary
-            for j, station2 in enumerate(stations):  # Für jede Station im Dictionary
-                if station2 in self.network[station1]:  # Wenn die Stationen verbunden sind
-                    matrix[i][j] = self.network[station1][station2][0]  # Setze das Gewicht in die Matrix ein
-        return matrix  # Gib die Matrix zurück
+        unvisited = set(self.stations)
+
+        while len(unvisited) > 0:
+            current_node = min(unvisited, key=lambda node: shortest_distances[
+                node])  # Nimm die nächste unbesuchte Station mit der geringsten Distanz
+
+            unvisited.remove(current_node)
+
+            if current_node == end:
+                break
+
+            for neighbor, (weight, line) in self.graph[current_node].items():  # Schaue alle Nachbarn des aktuellen Knotens an
+                new_distance = shortest_distances[current_node] + weight
+                if new_distance < shortest_distances[neighbor]:  # Wenn ein kürzerer Weg gefunden wird, aktualisiere die kürzeste Distanz und setze die vorherige Station
+                    shortest_distances[neighbor] = new_distance
+                    previous_stations[neighbor] = current_node
+                    previous_line[neighbor] = line
+
+        # Bauen Sie die Route rückwärts auf
+        shortest_route = []
+        current_node = end
+        while current_node is not None:
+            shortest_route.append((current_node, previous_line[current_node], shortest_distances[current_node]))
+            current_node = previous_stations[current_node]
+        shortest_route.reverse()
+
+        return shortest_route, shortest_distances[end]
