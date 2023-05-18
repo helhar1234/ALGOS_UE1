@@ -66,11 +66,11 @@ while True:
             existing_route = routes.get_route(split_input[1], split_input[2])
             if existing_route:
                 route, total_time = existing_route
-                print("Existing route!!")
+                print("Route existiert bereits!")
             else:
-                router = DijkstraRouter(network)
-                route, total_time = router.find_shortest_route(split_input[1], split_input[2])
-                network.add_route(split_input[1], split_input[2], (route, total_time))
+                dijkstraRouter = DijkstraRouter(network)
+                route, total_time = dijkstraRouter.find_shortest_route(split_input[1], split_input[2])
+                routes.add_route(split_input[1], split_input[2], (route, total_time))
             print_route(route, total_time)
         else:
             if not network.station_exists(split_input[1]):
