@@ -1,10 +1,10 @@
 import os
 import re
-import shlex    # für die Eingabe von Stationen mit Leerzeichen
+import shlex  # für die Eingabe von Stationen mit Leerzeichen
 
 from StartConsole import *
-from graph import*
-from shortestRoute import*
+from graph import *
+from shortestRoute import *
 
 
 def check_file_exists(filename):
@@ -13,10 +13,6 @@ def check_file_exists(filename):
         return False
     else:
         return True
-
-
-def check_station_exists(station):
-    return True
 
 
 def create_network_from_file(filename):
@@ -35,6 +31,7 @@ def create_network_from_file(filename):
                     station1 = line_parts[i].split('"')[1]
                     station2 = line_parts[i + 1].split('"')[1]
                     weight = int(line_parts[i].split(' ')[-1])
+                    line_name = line_name  # Speichern Sie den Namen der Linie für die spätere Verwendung
 
                     stations.add(station1)
                     stations.add(station2)
