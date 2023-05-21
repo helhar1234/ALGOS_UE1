@@ -1,29 +1,40 @@
 class Graph:
-    def __init__(self, stations):
-        self.stations = stations
+    def __init__(self, stations):   # Konstruktor mit allen Stationen
+        self.stations = stations    # Dictionary aller Stationen
+
+        # In self.index_to_station wird ein Dictionary erstellt, das die Indizes als Schlüssel
+        # und die Stationen als Werte hat. Das bedeutet, dass du durch Zugriff auf
+        # self.index_to_station[index] den Stationsnamen für einen bestimmten Index bekommen kannst.
+        # Das Gleiche gilt umgekehrt für station_to_index
         self.index_to_station = {index: station for index, station in enumerate(stations)}
         self.station_to_index = {station: index for index, station in enumerate(stations)}
-        # Erstellen einer Matrix der Größe n*n mit allen Werten auf Unendlich
+
+        # Hier wird eine 2D-Matrix erstellt, die die Anzahl der Stationen n in beiden Dimensionen hat -> nxn Matrix
+        # vorerst werden alle Matrix-Werte auf Unendlich gesetzt, da es zunächst noch keine Verbindungen gibt
         self.graph = [[float('inf')] * len(stations) for _ in range(len(stations))]
-        # Setzen Sie den Wert der Hauptdiagonale auf 0 (da die Entfernung von einer Station zu sich selbst 0 ist)
+
+        # Hauptdiagonale wird auf Null gesetzt, da die Verbindung zu sich selbst gleich Null ist
         for i in range(len(stations)):
             self.graph[i][i] = 0
-        # Zusätzliches Attribut, um die Linieninformationen für jede Kante zu speichern
+
+        # Matrix aller Linen (nxn n-Stationen). Vorerst werden alle Werte auf None gesetzt
         self.lines = [[None] * len(stations) for _ in range(len(stations))]
 
     def add_route(self, station1, station2, weight=1, line=None):
+        # Sucht die Indexe (in der Matrix) der beiden Stationen
         i = self.station_to_index[station1]
         j = self.station_to_index[station2]
-        # Füllen Sie die entsprechenden Zellen in der Matrix
+        # Fügt die Gewichte in die Matrix an den beiden Werten ein, wo sich die Stationen kreuzen
         self.graph[i][j] = weight
         self.graph[j][i] = weight
-        # Speichern Sie die Linie für die entsprechende Kante
+        # Fügt das Gleiche in die Matrix für die Lines ein
         self.lines[i][j] = line
         self.lines[j][i] = line
 
 
     def station_exists(self, station):
-        return station in self.stations
+        return station in self.stations # Station wird im Stationen-Dictionary gesucht
+        # Die Laufzeit ist konstant O(1), da nach einem unique Key gesucht wird
 
     def find_shortest_route(self, start, end):
         # Initialisiere die kürzesten Distanzen und vorherigen Stationen
