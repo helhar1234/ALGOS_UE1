@@ -32,7 +32,7 @@ class Graph:
         self.lines[j][i] = line
 
     def station_exists(self, station):
-        return station in self.stations # Station wird im Stationen-Dictionary gesucht
+        return station in self.stations  # Station wird im Stationen-Dictionary gesucht
         # Die Laufzeit ist konstant O(1), da nach einem unique Key gesucht wird
 
     def find_shortest_route(self, start, end):
@@ -43,36 +43,34 @@ class Graph:
 
         shortest_distances[start] = 0  # Setze die kürzeste Distanz zur Startstation auf 0
 
-        unvisited = set(self.stations)
+        unvisited = set(self.stations)  # Set mit allen unbesuchten Stationen
 
+        # Solange es noch unbesuchte Stationen gibt
         while len(unvisited) > 0:
-            current_node = min(unvisited, key=lambda node: shortest_distances[
-                node])  # Nimm die nächste unbesuchte Station mit der geringsten Distanz
+            current_node = min(unvisited, key=lambda node: shortest_distances[node])  # Nimm die nächste unbesuchte Station mit der geringsten Distanz
 
-            unvisited.remove(current_node)
+            unvisited.remove(current_node)  # Entferne die Station aus den unbesuchten Stationen
 
             if current_node == end:
                 break
 
             current_index = self.station_to_index[current_node]  # Index des aktuellen Knotens
 
-            for neighbor_index, weight in enumerate(
-                    self.graph[current_index]):  # Schaue alle Nachbarn des aktuellen Knotens an
+            for neighbor_index, weight in enumerate(self.graph[current_index]):  # Schaue alle Nachbarn des aktuellen Knotens an
                 if weight != float('inf'):  # Es besteht eine Verbindung zu diesem Nachbarn
                     neighbor = self.index_to_station[neighbor_index]  # Station des Nachbarn
-                    new_distance = shortest_distances[current_node] + weight
-                    if new_distance < shortest_distances[neighbor]:  # Wenn ein kürzerer Weg gefunden wird, aktualisiere die kürzeste Distanz und setze die vorherige Station
-                        shortest_distances[neighbor] = new_distance
-                        previous_stations[neighbor] = current_node
-                        previous_line[neighbor] = self.lines[current_index][neighbor_index]
+                    new_distance = shortest_distances[current_node] + weight  # Berechne die neue Distanz zum Nachbarn (über den aktuellen Knoten)
+                    if new_distance < shortest_distances[neighbor]:  # Wenn ein kürzerer Weg gefunden wird,
+                        shortest_distances[neighbor] = new_distance  # Aktualisiere die kürzeste Distanz
+                        previous_stations[neighbor] = current_node  # Aktualisiere die vorherige Station
+                        previous_line[neighbor] = self.lines[current_index][neighbor_index]  # Aktualisiere die vorherige Linie
 
-        # Bauen Sie die Route rückwärts auf
-        shortest_route = []
-        current_node = end
-        while current_node is not None:
-            shortest_route.append((current_node, previous_line[current_node], shortest_distances[current_node]))
-            current_node = previous_stations[current_node]
-        shortest_route.reverse()
+        shortest_route = []  # Liste für die kürzeste Route
+        current_node = end  # Aktuelle Station ist die Endstation
+        while current_node is not None:  # Solange es noch eine aktuelle Station gibt
+            # Füge die aktuelle Station, die vorherige Linie und die kürzeste Distanz zur Route hinzu
+            shortest_route.append((current_node, previous_line[current_node], shortest_distances[current_node])) 
+            current_node = previous_stations[current_node]  # Aktuelle Station wird zur vorherigen Station
+        shortest_route.reverse()  # Route wird umgedreht, da sie von hinten nach vorne erstellt wurde
 
-        return shortest_route, shortest_distances[end]
-
+        return shortest_route, shortest_distances[end]  # Kürzeste Route und kürzeste Distanz werden zurückgegeben

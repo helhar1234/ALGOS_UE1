@@ -54,50 +54,54 @@ def create_network_from_file(filename):
         return graph
 
 
-programm_description()
+programm_description()  # Beschreibung des Programms wird ausgegeben
 
-routes = ShortestRoutes()
+routes = ShortestRoutes()  # Objekt für die kürzesten Routen wird erstellt
 
-previous_filename = ""
-filename = ""
-network = ""
+previous_filename = ""  # Variable für die vorherige Datei
+filename = ""  # Variable für die aktuelle Datei
+network = ""  # Variable für das aktuelle Netzwerk
 
-while True:
+while True:  # Endlosschleife für die Eingabe von Befehlen
     command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
-    if not command.strip():
+    if not command.strip():  # Wenn der Befehl leer ist, wird die Schleife erneut ausgeführt
         print(bcolors.WARNING + "\nUngültiger Befehl!" + bcolors.RESET)
         continue
 
-    split_input = shlex.split(command)
+    split_input = shlex.split(command)  # Eingabe wird in einzelne Wörter geteilt
 
-    if split_input[0] == "exit":
+    if split_input[0] == "exit":  # Wenn der Befehl "exit" ist, wird das Programm beendet
         print(bcolors.CYAN + bcolors.BOLD + "Auf Wiedersehen!" + bcolors.RESET)
         break
 
-    if len(split_input) < 3:
+    if len(split_input) < 3:  # Wenn die Eingabe weniger als 3 Wörter hat, wird die Schleife erneut ausgeführt
         print(bcolors.WARNING + "\nUngültiger Befehl!" + bcolors.RESET)
         continue
 
-    if not split_input[0].endswith(".txt"):
+    if not split_input[0].endswith(".txt"):  # Wenn die Eingabe nicht mit ".txt" endet, wird ".txt" hinzugefügt
         split_input[0] += ".txt"
 
+    #   Wenn die Datei existiert, wird sie geöffnet und das Netzwerk wird erstellt
     if check_file_exists(split_input[0]):
-        filename = split_input[0]
-        if filename != previous_filename:
-            previous_filename = filename
-            network = create_network_from_file(split_input[0])
+        filename = split_input[0]  # Dateiname wird gespeichert
+        if filename != previous_filename:  # Wenn der Dateiname nicht gleich dem vorherigen Dateinamen ist
+            previous_filename = filename  # wird der vorherige Dateiname aktualisiert
+            network = create_network_from_file(split_input[0])  # Netzwerk wird erstellt
+
+        #   Wenn die Stationen existieren, wird die kürzeste Route gesucht
         if network.station_exists(split_input[1]) and network.station_exists(split_input[2]):
+            #   Wenn die Route bereits gesucht wurde, wird sie aus dem Dictionary geholt
             existing_route = routes.get_route(split_input[1], split_input[2])
-            if existing_route:
+            if existing_route:  # Wenn die Route existiert, wird sie ausgegeben
                 route, total_time = existing_route
-            else:
+            else:  # Wenn die Route nicht existiert, wird sie gesucht und zum Dictionary hinzugefügt
                 route, total_time = network.find_shortest_route(split_input[1], split_input[2])
                 routes.add_route(split_input[1], split_input[2], (route, total_time))
-            print_route(route, total_time)
-        else:
+            print_route(route, total_time)  # Route wird ausgegeben
+        else:  # Wenn die Stationen nicht existieren, wird eine Fehlermeldung ausgegeben
             if not network.station_exists(split_input[1]):
                 print(bcolors.WARNING + f"\nUngültige Station: {split_input[1]}!" + bcolors.RESET)
             else:
                 print(bcolors.WARNING + f"\nUngültige Station: {split_input[2]}!" + bcolors.RESET)
-    else:
+    else:  # Wenn die Datei nicht existiert, wird eine Fehlermeldung ausgegeben
         print(bcolors.WARNING + f"\nDatei nicht gefunden: {split_input[0]}" + bcolors.RESET)
