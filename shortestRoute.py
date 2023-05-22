@@ -1,4 +1,6 @@
 from colors import *
+
+
 class ShortestRoutes:
     def __init__(self):
         self.routes = {}

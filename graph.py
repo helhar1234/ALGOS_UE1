@@ -31,7 +31,6 @@ class Graph:
         self.lines[i][j] = line
         self.lines[j][i] = line
 
-
     def station_exists(self, station):
         return station in self.stations # Station wird im Stationen-Dictionary gesucht
         # Die Laufzeit ist konstant O(1), da nach einem unique Key gesucht wird
@@ -62,8 +61,7 @@ class Graph:
                 if weight != float('inf'):  # Es besteht eine Verbindung zu diesem Nachbarn
                     neighbor = self.index_to_station[neighbor_index]  # Station des Nachbarn
                     new_distance = shortest_distances[current_node] + weight
-                    if new_distance < shortest_distances[
-                        neighbor]:  # Wenn ein kürzerer Weg gefunden wird, aktualisiere die kürzeste Distanz und setze die vorherige Station
+                    if new_distance < shortest_distances[neighbor]:  # Wenn ein kürzerer Weg gefunden wird, aktualisiere die kürzeste Distanz und setze die vorherige Station
                         shortest_distances[neighbor] = new_distance
                         previous_stations[neighbor] = current_node
                         previous_line[neighbor] = self.lines[current_index][neighbor_index]
