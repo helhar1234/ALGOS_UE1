@@ -60,6 +60,7 @@ routes = ShortestRoutes()
 
 previous_filename = ""
 filename = ""
+network = ""
 
 while True:
     command = input(bcolors.HEADER + bcolors.RED + "path_finder: " + bcolors.RESET)
