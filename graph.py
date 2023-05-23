@@ -13,7 +13,7 @@ class Graph:
         # vorerst werden alle Matrix-Werte auf None gesetzt, da es zunächst noch keine Verbindungen gibt
         self.graph = [[None] * len(stations) for _ in range(len(stations))]
 
-        # Hauptdiagonale wird auf None gesetzt, da die Verbindung zu sich selbst gleich Null ist
+        # Hauptdiagonale wird auf 0 gesetzt, da die Verbindung zu sich selbst ein Gewicht von 0 hat ist
         for i in range(len(stations)):
             self.graph[i][i] = 0
 
@@ -57,7 +57,7 @@ class Graph:
             current_index = self.station_to_index[current_node]  # Index des aktuellen Knotens
 
             for neighbor_index, weight in enumerate(self.graph[current_index]):  # Schaue alle Nachbarn des aktuellen Knotens an
-                if weight != None:  # Es besteht eine Verbindung zu diesem Nachbarn
+                if weight is not None:  # Es besteht eine Verbindung zu diesem Nachbarn
                     neighbor = self.index_to_station[neighbor_index]  # Station des Nachbarn
                     new_distance = shortest_distances[current_node] + weight  # Berechne die neue Distanz zum Nachbarn (über den aktuellen Knoten)
                     if new_distance < shortest_distances[neighbor]:  # Wenn ein kürzerer Weg gefunden wird,
