@@ -13,7 +13,7 @@ class ShortestRoutes:  # Klasse für die kürzesten Routen
 
     def add_route(self, start, end, route):  # Funktion, die die Route zum Dictionary hinzufügt
         if start not in self.routes:  # Wenn die Startstation nicht im Dictionary ist, wird sie hinzugefügt
-            self.routes[start] = {}  # Dictionary für die Endstationen wird erstellt
+            self.routes[start] = {}  # Dictionary für die Startstationen wird erstellt
         self.routes[start][end] = route  # Route wird zum Dictionary hinzugefügt
 
 
